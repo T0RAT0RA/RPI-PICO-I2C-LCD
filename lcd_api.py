@@ -1,7 +1,7 @@
 import time
 
 class LcdApi:
-    
+
     # Implements the API for talking with HD44780 compatible character LCDs.
     # This class only knows what commands to send to the LCD, and not how to get
     # them to the LCD.
@@ -10,7 +10,7 @@ class LcdApi:
     #
     # The following constant names were lifted from the avrlib lcd.h header file,
     # with bit numbers changed to bit masks.
-    
+
     # HD44780 LCD controller command set
     LCD_CLR             = 0x01  # DB0: clear display
     LCD_HOME            = 0x02  # DB1: return to home position
@@ -68,6 +68,13 @@ class LcdApi:
         self.cursor_x = 0
         self.cursor_y = 0
 
+    def clear_row(self, row):
+        # Clears a row
+        self.cursor_x = 0
+        self.cursor_y = row
+        self.move_to(self.cursor_x, self.cursor_y)
+        self.putstr(" " * self.num_columns)
+
     def show_cursor(self):
         # Causes the cursor to be made visible
         self.hal_write_command(self.LCD_ON_CTRL | self.LCD_ON_DISPLAY |
@@ -97,7 +104,7 @@ class LcdApi:
 
     def backlight_on(self):
         # Turns the backlight on.
-        
+
         # This isn't really an LCD command, but some modules have backlight
         # controls, so this allows the hal to pass through the command.
         self.backlight = True
