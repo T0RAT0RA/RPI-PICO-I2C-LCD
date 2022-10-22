@@ -2,7 +2,6 @@ import utime
 import gc
 
 from lcd_api import LcdApi
-from machine import I2C
 
 # PCF8574 pin definitions
 MASK_RS = 0x01       # P0
@@ -13,7 +12,7 @@ SHIFT_BACKLIGHT = 3  # P3
 SHIFT_DATA      = 4  # P4-P7
 
 class I2cLcd(LcdApi):
-    
+
     #Implements a HD44780 character LCD connected via PCF8574 on I2C
 
     def __init__(self, i2c, i2c_addr, num_lines, num_columns):
@@ -45,17 +44,17 @@ class I2cLcd(LcdApi):
         self.i2c.writeto(self.i2c_addr, bytes([byte | MASK_E]))
         self.i2c.writeto(self.i2c_addr, bytes([byte]))
         gc.collect()
-        
+
     def hal_backlight_on(self):
         # Allows the hal layer to turn the backlight on
         self.i2c.writeto(self.i2c_addr, bytes([1 << SHIFT_BACKLIGHT]))
         gc.collect()
-        
+
     def hal_backlight_off(self):
         #Allows the hal layer to turn the backlight off
         self.i2c.writeto(self.i2c_addr, bytes([0]))
         gc.collect()
-        
+
     def hal_write_command(self, cmd):
         # Write a command to the LCD. Data is latched on the falling edge of E.
         byte = ((self.backlight << SHIFT_BACKLIGHT) |
@@ -80,7 +79,7 @@ class I2cLcd(LcdApi):
         self.i2c.writeto(self.i2c_addr, bytes([byte]))
         byte = (MASK_RS |
                 (self.backlight << SHIFT_BACKLIGHT) |
-                ((data & 0x0f) << SHIFT_DATA))      
+                ((data & 0x0f) << SHIFT_DATA))
         self.i2c.writeto(self.i2c_addr, bytes([byte | MASK_E]))
         self.i2c.writeto(self.i2c_addr, bytes([byte]))
         gc.collect()

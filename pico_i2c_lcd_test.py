@@ -2,7 +2,6 @@ import utime
 
 import machine
 from machine import I2C
-from lcd_api import LcdApi
 from pico_i2c_lcd import I2cLcd
 
 I2C_ADDR     = 0x27
@@ -13,7 +12,7 @@ def test_main():
     #Test function for verifying basic functionality
     print("Running test_main")
     i2c = I2C(0, sda=machine.Pin(0), scl=machine.Pin(1), freq=400000)
-    lcd = I2cLcd(i2c, I2C_ADDR, I2C_NUM_ROWS, I2C_NUM_COLS)    
+    lcd = I2cLcd(i2c, I2C_ADDR, I2C_NUM_ROWS, I2C_NUM_COLS)
     lcd.putstr("It Works!")
     utime.sleep(2)
     lcd.clear()
@@ -35,7 +34,7 @@ def test_main():
             lcd.blink_cursor_on()
         if count % 10 == 3:
             print("Turning blink cursor off")
-            lcd.blink_cursor_off()                    
+            lcd.blink_cursor_off()
         if count % 10 == 4:
             print("Turning backlight off")
             lcd.backlight_off()
