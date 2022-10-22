@@ -1,7 +1,7 @@
 import utime
 import gc
 
-from lcd_api import LcdApi
+from . import lcd_api
 
 # PCF8574 pin definitions
 MASK_RS = 0x01       # P0
@@ -11,7 +11,7 @@ MASK_E  = 0x04       # P2
 SHIFT_BACKLIGHT = 3  # P3
 SHIFT_DATA      = 4  # P4-P7
 
-class I2cLcd(LcdApi):
+class I2cLcd(lcd_api.LcdApi):
 
     #Implements a HD44780 character LCD connected via PCF8574 on I2C
 
@@ -30,7 +30,7 @@ class I2cLcd(LcdApi):
         # Put LCD into 4-bit mode
         self.hal_write_init_nibble(self.LCD_FUNCTION)
         utime.sleep_ms(1)
-        LcdApi.__init__(self, num_lines, num_columns)
+        lcd_api.LcdApi.__init__(self, num_lines, num_columns)
         cmd = self.LCD_FUNCTION
         if num_lines > 1:
             cmd |= self.LCD_FUNCTION_2LINES
